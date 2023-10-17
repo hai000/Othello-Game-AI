@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import controller.BoardController;
+import model.BoardHelp;
 
 public class GamePanel extends JPanel {
 	public BoardCell[][] cells;
@@ -82,23 +83,45 @@ public class GamePanel extends JPanel {
 				cells[i][j].canCheck = false;
 				cells[i][j].highLight = false;
 
-				if (i == indexI && j == indexJ)
+				if (i == indexI && j == indexJ) {
+					cells[i][j].check = true;
 					cells[i][j].newTouch = true;
-				else
+				}
+
+				else {
 					cells[i][j].newTouch = false;
+				}
 			}
 		}
-		for (Point point : BoardController.getPointsCanMove(playerNext)) {
-			cells[point.x][point.y].highLight = true;
-			cells[point.x][point.y].canCheck = true;
-		}
-		;
 		curentPlayer = playerNext;
-		lbTurnOf.setText("Turn of player: " + ((curentPlayer == 1) ? "White" : "Black"));
-		lbScore1.setText("Score Player White: "+ BoardController.getPointOfPlayer(player1));
-		lbScore2.setText("Score Player Black: "+ BoardController.getPointOfPlayer(player2));
+		if(curentPlayer!=2) {
+			for (Point point : BoardController.getPointsCanMove(playerNext)) {
+				
+				cells[point.x][point.y].highLight = true;
+				cells[point.x][point.y].canCheck = true;
+			}
+			;
+		}
+	
 		
+		lbTurnOf.setText("Turn of player: " + ((curentPlayer == 1) ? "White" : "Black"));
+		lbScore1.setText("Score Player White: " + BoardController.getPointOfPlayer(player1));
+		lbScore2.setText("Score Player Black: " + BoardController.getPointOfPlayer(player2));
+
 		this.repaint();
+		if (curentPlayer == 2) {
+			Timer timerBot = new Timer();
+			TimerTask timerTask = new TimerTask() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					BoardController.AIPlay(curentPlayer);
+
+				}
+			};
+			timer.schedule(timerTask, 1000);
+		}
 
 	}
 
@@ -127,8 +150,23 @@ public class GamePanel extends JPanel {
 			cells[point.x][point.y].canCheck = true;
 		}
 		;
-		this.repaint();
 
+		this.repaint();
+		Timer timerT = new Timer();
+		TimerTask task = new TimerTask() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				BoardController.AIPlay(curentPlayer);
+
+			}
+		};
+		timerT.schedule(task, 1000);
+
+	}
+	public void updateWin() {
+		System.out.println("Win");
 	}
 
 }

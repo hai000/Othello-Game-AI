@@ -42,8 +42,8 @@ public class BoardCell extends JLabel implements MouseListener {
 
 		}
 
-		if (check) {
-			g2.fillOval(0, 0, this.getWidth(), this.getHeight());
+		if (check) {//vẽ cờ
+			g2.fillOval(3, 3, this.getWidth()-6, this.getHeight()-6);
 		}
 		if (newTouch) {
 			g2.setColor(Color.red);
@@ -51,20 +51,18 @@ public class BoardCell extends JLabel implements MouseListener {
 		}
 		if (highLight) {
 			g2.setColor(Color.yellow);
-			g2.drawRect(5, 5, this.getWidth()-10, this.getHeight()-10);
+			g2.drawRect(4, 4, this.getWidth()-8, this.getHeight()-8);
 		}
 		super.paint(g);
 	}
 
 	public void touch() {
 		if (canCheck) {
-			
 			check = true;
 			newTouch=true;
 			repaint();
 			gamePanel.updatePlayer(player, i, j);
 			canCheck=false;
-			
 		}
 	}
 
