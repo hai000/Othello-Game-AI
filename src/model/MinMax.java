@@ -11,6 +11,7 @@ public class MinMax {
 		int bestScore = Integer.MIN_VALUE;
 
 		List<Point> pointCanMove = BoardHelp.getPointsCanMove(board.board, player);
+		bestMove=pointCanMove.get(0);
 		for (Point point : pointCanMove) {
 			int[][] coppyBoard = coppyBoard(board.board);
 			coppyBoard = BoardHelp.getBoardAfterMove(coppyBoard, player, point);
@@ -78,13 +79,25 @@ public class MinMax {
 				if (playerCur == player) {
 					score += BoardHelp.BOARDEVALUATE[row][col];
 				} else if (playerCur == (player == 1 ? 2 : 1)) {
+					
 					score -= BoardHelp.BOARDEVALUATE[row][col];
 				}
 			}
 		}
+		score+=7*(countPieces(board, player)-countPieces(board, (player==1?2:1)));
 		return score;
 	}
-
+public static int countPieces(int[][] board , int player) {
+	int res=0;
+	for(int i =0;i<board.length;i++) {
+		for (int j = 0; j < board[i].length; j++) {
+			if(board[i][j]==player) {
+				res++;
+			}
+		}
+	}
+	return res;
+}
 	public static int[][] coppyBoard(int[][] board) {
 		int[][] coppyBoard = new int[board.length][board[0].length];
 		for (int i = 0; i < board.length; i++) {

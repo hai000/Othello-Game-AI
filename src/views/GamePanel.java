@@ -7,25 +7,30 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import controller.BoardController;
 import model.BoardHelp;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements ActionListener{
 	public BoardCell[][] cells;
 	public int player1 = 1, player2 = 2, curentPlayer = player2;
-	// đen là 2 trắng là 1
-	JLabel lbScore1, lbScore2, lbTime, lbTurnOf;
+	// đen là 2 trắng là 1 --- bạn là 1--- máy là 2
+	JLabel lbScore1, lbScore2, lbTime, lbTurnOf,lbWinner;
 	int score1 = 2, score2 = 2, seconds = 0;
 	Timer timer = new Timer();
+	JPanel sideBar;
 	Font font;
+	JButton btnReplay = new JButton("Replay");
 
 	public GamePanel(int rows, int cols) {
 		this.setBackground(Color.white);
@@ -43,9 +48,10 @@ public class GamePanel extends JPanel {
 			}
 		}
 
-		JPanel sideBar = new JPanel();
+		sideBar = new JPanel();
 		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
 		sideBar.setPreferredSize(new Dimension(300, 0));
+		
 		lbScore1 = new JLabel();
 		lbScore2 = new JLabel();
 		lbTurnOf = new JLabel("Turn of player: " + (curentPlayer == 1 ? "White" : "Black"));
@@ -54,14 +60,28 @@ public class GamePanel extends JPanel {
 		lbScore2.setText("Score Player Black: " + score2);
 		lbScore2.setForeground(Color.red);
 		lbTime = new JLabel();
+		lbWinner = new JLabel();
 		lbScore1.setFont(font);
 		lbScore2.setFont(font);
 		lbTime.setFont(font);
 		lbTurnOf.setFont(font);
+		JPanel jPanel = new JPanel();
+		
+		btnReplay.setForeground(Color.YELLOW);
+		btnReplay.setBackground(Color.BLACK);
+		btnReplay.setOpaque(true);
+		btnReplay.setFocusPainted(false);
+		btnReplay.setPreferredSize(new Dimension(100, 50));
+		jPanel.add(btnReplay);
+		
 		sideBar.add(lbScore1);
 		sideBar.add(lbScore2);
 		sideBar.add(lbTurnOf);
 		sideBar.add(lbTime);
+		sideBar.add(lbWinner);
+		sideBar.add(btnReplay);
+		sideBar.add(jPanel);
+		btnReplay.addActionListener(this);
 
 		this.add(sideBar, BorderLayout.WEST);
 
@@ -94,34 +114,38 @@ public class GamePanel extends JPanel {
 			}
 		}
 		curentPlayer = playerNext;
-		if(curentPlayer!=2) {
+		if (curentPlayer != 2) {
 			for (Point point : BoardController.getPointsCanMove(playerNext)) {
-				
+
 				cells[point.x][point.y].highLight = true;
 				cells[point.x][point.y].canCheck = true;
 			}
 			;
 		}
-	
-		
+
 		lbTurnOf.setText("Turn of player: " + ((curentPlayer == 1) ? "White" : "Black"));
 		lbScore1.setText("Score Player White: " + BoardController.getPointOfPlayer(player1));
 		lbScore2.setText("Score Player Black: " + BoardController.getPointOfPlayer(player2));
 
 		this.repaint();
-		if (curentPlayer == 2) {
-			Timer timerBot = new Timer();
-			TimerTask timerTask = new TimerTask() {
+		if(!BoardController.isWin()) {
+			if (curentPlayer == 2) {
+				Timer timerBot = new Timer();
+				TimerTask timerTask = new TimerTask() {
 
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					BoardController.AIPlay(curentPlayer);
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						BoardController.AIPlay(curentPlayer);
 
-				}
-			};
-			timer.schedule(timerTask, 1000);
+					}
+				};
+				timer.schedule(timerTask, 1000);
+			}
+		}else {
+			BoardController.notifyWin();
 		}
+
 
 	}
 
@@ -165,8 +189,29 @@ public class GamePanel extends JPanel {
 		timerT.schedule(task, 1000);
 
 	}
-	public void updateWin() {
-		System.out.println("Win");
+
+	public void updateWin(String winner) {
+		lbWinner.setFont(font);
+		lbWinner.setText(winner);
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==btnReplay) {
+			
+			for(int i = 0;i<8;i++) {
+				for(int j = 0;j<8;j++) {
+					cells[i][j].reset();
+				}
+			}
+			
+			BoardController.reset();
+			curentPlayer=2;
+			
+		}
+		
 	}
 
 }

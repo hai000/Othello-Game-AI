@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardHelp {
-	public static final int[][] BOARDEVALUATE = { { 200, -20, 20, 5, 5, 20, -20, 200 },
+	public static final int[][] BOARDEVALUATE =
+	{ { 200, -20, 20, 5, 5, 20, -20, 200 },
 												{ -20, -40, -5, -5, -5, -5, -40, -20 }, 
 												{ 20, -5, 15, 3, 3, 15, -5, 20 }, 
 												{ 5, -5, 3, 3, 3, 3, -5, 5 },
@@ -13,6 +14,14 @@ public class BoardHelp {
 												{ 20, -5, 15, 3, 3, 15, -5, 20 }, 
 												{ -20, -40, -5, -5, -5, -5, -40, -20 },
 												{ 200, -20, 20, 5, 5, 20, -20, 200 } };
+//	{{100, -20, 10,  5,  5, 10, -20, 100},
+//        {-20, -50, -2, -2, -2, -2, -50, -20},
+//        {10,  -2,   1,  1,  1,  1,  -2,  10},
+//        {5,   -2,   1,  0,  0,  1,  -2,   5},
+//        {5,   -2,   1,  0,  0,  1,  -2,   5},
+//        {10,  -2,   1,  1,  1,  1,  -2,  10},
+//        {-20, -50, -2, -2, -2, -2, -50, -20},
+//        {100, -20, 10,  5,  5, 10, -20, 100}};
 
 	public static boolean isGameOver(int[][] board) {
 		return !(hasMoveAny(board, 1) || hasMoveAny(board, 2));
@@ -39,16 +48,17 @@ public class BoardHelp {
 
 		return clone;
 	}
-	public static int getToal(int[][] board,int player) {
-		int res=0;
-		for(int i =0;i<board.length;i++) {
+
+	public static int getToal(int[][] board, int player) {
+		int res = 0;
+		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
-				if(board[i][j]==player) {
+				if (board[i][j] == player) {
 					res++;
 				}
 			}
 		}
-		
+
 		return res;
 	}
 
@@ -86,7 +96,7 @@ public class BoardHelp {
 		// check down
 		indexI = i + 1;
 		indexJ = j;
-		while (indexI < board.length-1 && board[indexI][indexJ] == opponentPlayer) {
+		while (indexI < board.length - 1 && board[indexI][indexJ] == opponentPlayer) {
 			points.add(new Point(indexI, indexJ));
 			indexI++;
 		}
@@ -186,17 +196,17 @@ public class BoardHelp {
 			count++;
 			indexI--;
 		}
-		if (indexI >= 0&&board[indexI][indexJ] == player && count > 0)
+		if (indexI >= 0 && board[indexI][indexJ] == player && count > 0)
 			return true;
 		// check down
 		indexI = i + 1;
 		indexJ = j;
 		count = 0;
-		while (indexI < board.length-1 && board[indexI][indexJ] == opponentPlayer) {
+		while (indexI < board.length - 1 && board[indexI][indexJ] == opponentPlayer) {
 			count++;
 			indexI++;
 		}
-		if (indexI < board.length&&board[indexI][indexJ] == player && count > 0)
+		if (indexI < board.length && board[indexI][indexJ] == player && count > 0)
 			return true;
 
 		// check left
@@ -214,11 +224,11 @@ public class BoardHelp {
 		indexI = i;
 		indexJ = j + 1;
 		count = 0;
-		while (indexJ < board[i].length-1 && board[indexI][indexJ] == opponentPlayer) {
+		while (indexJ < board[i].length - 1 && board[indexI][indexJ] == opponentPlayer) {
 			indexJ++;
 			count++;
 		}
-		if (count > 0&&indexJ < board[i].length&&board[indexI][indexJ] == player)
+		if (count > 0 && indexJ < board[i].length && board[indexI][indexJ] == player)
 			return true;
 
 		// check up left
@@ -253,7 +263,7 @@ public class BoardHelp {
 			indexJ--;
 			count++;
 		}
-		if ( indexJ >= 0 && indexI < board.length &&board[indexI][indexJ] == player && count > 0)
+		if (indexJ >= 0 && indexI < board.length && board[indexI][indexJ] == player && count > 0)
 			return true;
 
 		// check down right
@@ -265,7 +275,7 @@ public class BoardHelp {
 			indexJ++;
 			count++;
 		}
-		if (  count > 0&&indexI < board.length&& indexJ < board.length&&board[indexI][indexJ] == player)
+		if (count > 0 && indexI < board.length && indexJ < board.length && board[indexI][indexJ] == player)
 			return true;
 		return false;
 

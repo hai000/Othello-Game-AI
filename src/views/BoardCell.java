@@ -100,4 +100,14 @@ public class BoardCell extends JLabel implements MouseListener {
 
 	}
 
+	public void reset() {
+		// TODO Auto-generated method stub
+		this.player=0;
+		canCheck=false;
+		check=false;
+		newTouch=false;
+		this.repaint();
+		
+	}
+
 }

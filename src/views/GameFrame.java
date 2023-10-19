@@ -6,7 +6,7 @@ import controller.BoardController;
 
 public class GameFrame extends JFrame {
 	public GameFrame() {
-		GamePanel gamePanel = new GamePanel(8, 8);
+ 		GamePanel gamePanel = new GamePanel(8, 8);
 		BoardController boardController = new BoardController(gamePanel);
 		gamePanel.startBoard(boardController.boardGame.board);
 		this.add(gamePanel);

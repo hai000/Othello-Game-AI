@@ -22,16 +22,14 @@ public class BoardController {
 	}
 
 	public static void updateMoveFromView(int player, int indexI, int indexJ) {
-		if(!isWin()) {
+
 		boardGame.board = BoardHelp.getBoardAfterMove(boardGame.board, player, new Point(indexI, indexJ));
+
 		if (BoardHelp.hasMoveAny(boardGame.board, (player == 1 ? 2 : 1))) {
 			boardGameView.update(boardGame.board, (player == 1 ? 2 : 1), indexI, indexJ);
 		} else {
-			System.out.println(player==1?"White":"Black"+ " được thêm lượt");
+			System.out.println(player == 1 ? "White" : "Black" + " được thêm lượt");
 			boardGameView.update(boardGame.board, player, indexI, indexJ);
-		}}
-		else {
-			notifyWin();
 		}
 
 	}
@@ -51,27 +49,31 @@ public class BoardController {
 	public static boolean isWin() {
 		return BoardHelp.isGameOver(boardGame.board);
 	}
+
 	public static void notifyWin() {
-		boardGameView.updateWin();
+		boardGameView.updateWin(
+				BoardHelp.getToal(boardGame.board, 1) > BoardHelp.getToal(boardGame.board, 2) ? "You Win" : "You Lose");
 	}
 
 	public static void AIPlay(int player) {
-		if (!isWin()) {
 
-			Point point = MinMax.findBestMove(boardGame, false, player);
-			boardGame.board = BoardHelp.getBoardAfterMove(boardGame.board, player, point);
+		Point point = MinMax.findBestMove(boardGame, false, player);
+		boardGame.board = BoardHelp.getBoardAfterMove(boardGame.board, player, point);
 
-			if (BoardHelp.hasMoveAny(boardGame.board, (player == 1 ? 2 : 1))) {
-				boardGameView.update(boardGame.board, (player == 1 ? 2 : 1), point.x, point.y);
-			} else {
-				System.out.println(player==1?"White":"Black"+ " được thêm lượt");
-				boardGameView.update(boardGame.board, player, point.x, point.y);
-			}
-
+		if (BoardHelp.hasMoveAny(boardGame.board, (player == 1 ? 2 : 1))) {
+			boardGameView.update(boardGame.board, (player == 1 ? 2 : 1), point.x, point.y);
 		} else {
-			notifyWin();
+			System.out.println(player == 1 ? "White" : "Black" + " được thêm lượt");
+			boardGameView.update(boardGame.board, player, point.x, point.y);
 		}
-		
+
+	}
+
+	public static void reset() {
+		// TODO Auto-generated method stub
+		boardGame.getNewBoard(8, 8);
+		boardGameView.startBoard(boardGame.board);
+
 	}
 
 }
