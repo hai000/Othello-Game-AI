@@ -1,15 +1,14 @@
-package views;
+package view;
 
 import javax.swing.JFrame;
 
-import controller.BoardController;
+import controller.BoardGameController;
 
 public class GameFrame extends JFrame {
 	public GameFrame() {
- 		GamePanel gamePanel = new GamePanel(8, 8);
-		BoardController boardController = new BoardController(gamePanel);
-		gamePanel.startBoard(boardController.boardGame.board);
-		this.add(gamePanel);
+		GamePanel view = new GamePanel(8, 8);
+		BoardGameController boardController = new BoardGameController(view);
+		this.setContentPane(view);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);
